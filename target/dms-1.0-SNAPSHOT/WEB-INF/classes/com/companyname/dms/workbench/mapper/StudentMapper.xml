@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.companyname.dms.workbench.mapper.StudentMapper">
+
+    <select id="getTotalByOut" resultType="int">
+
+        select count(*)
+
+        from tb_student s
+        join tb_move_out mo
+        on s.id=mo.stu_id
+
+        where s.state not in('已入住','待入住')
+
+        <if test="stuName!=null and stuName!=''">
+
+            and s.name like "%"#{stuName}"%"
+
+        </if>
+
+
+    </select>
+
+    <select id="getStuListByOut" resultType="map">
+
+        select s.name,s.grade,s.create_date,s.state,s.dorm_id,
+        mo.move_out_date
+
+        from tb_student s
+        join tb_move_out mo
+        on s.id=mo.stu_id
+
+        where s.state not in('已入住','待入住')
+
+        <if test="stuName!=null and stuName!=''">
+
+            and s.name like "%"#{stuName}"%"
+
+        </if>
+
+        order by s.name asc
+
+        limit #{skipCount},#{pageSize}
+
+    </select>
+
+
+
+    <select id="getIntoStu" resultType="map">
+
+        select id,name
+        from tb_student
+        where state='已入住' or state='待入住'
+
+    </select>
+
+    <select id="getStuListByInto" resultType="map">
+
+        select s.name,s.grade,s.create_date,s.state,s.dorm_id,
+               mi.move_into_date
+
+        from tb_student s
+        join tb_move_into mi
+        on s.id=mi.stu_id
+
+        where s.state in('已入住','待入住')
+
+        <if test="stuName!=null and stuName!=''">
+
+            and s.name like "%"#{stuName}"%"
+
+        </if>
+        order by s.name asc
+
+        limit #{skipCount},#{pageSize}
+
+    </select>
+
+    <select id="getTotalByInto" resultType="int">
+
+        select count(*)
+
+        from tb_student s
+        join tb_move_into mi
+        on s.id=mi.stu_id
+
+        where s.state in('已入住','待入住')
+
+        <if test="stuName!=null and stuName!=''">
+
+            and s.name like "%"#{stuName}"%"
+
+        </if>
+
+
+    </select>
+
+    <select id="getNotIntoStu" resultType="map">
+
+        select id,name
+        from tb_student
+        where state!='已入住' and state!='待入住'
+
+    </select>
+
+    <update id="updateById">
+        update tb_student
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="age != null and age != ''">age = #{age},</if>
+            <if test="grade != null and grade != ''">grade = #{grade},</if>
+            <if test="major != null and major != ''">major = #{major},</if>
+            <if test="createDate != null and createDate != ''">create_date = #{createDate},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="dormId != null and dormId != ''">dorm_id = #{dormId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getStuInfoById" resultType="Student">
+
+        select * from tb_student where id=#{id}
+
+    </select>
+
+    <delete id="deleteById">
+
+        delete from tb_student where id in
+
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+
+    <select id="selectByIds" resultType="int">
+
+        select count(*) from tb_student where id in
+
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
+    <insert id="save">
+        insert into tb_student values(null,#{name},#{gender},#{age},#{grade},#{major},#{createDate},#{state},#{dormId})
+    </insert>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+
+        from tb_student
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                name like "%"#{name}"%"
+
+            </if>
+
+            <if test="gender!=null and gender!=''">
+
+                and gender=#{gender}
+
+            </if>
+            <if test="grade!=null and grade!=''">
+
+                and grade=#{grade}
+
+            </if>
+
+            <if test="major!=null and major!=''">
+
+                and major=#{major}
+
+            </if>
+
+            <if test="state!=null and state!=''">
+
+                and state=#{state}
+
+            </if>
+
+            <if test="createDate!=null and createDate!=''">
+
+                and create_date &gt;= #{createDate}
+
+            </if>
+
+            <if test="dormId!=null and dormId!=''">
+
+                and dorm_id=#{dormId}
+
+            </if>
+
+
+
+        </where>
+
+    </select>
+
+    <select id="getDormAccountListByCondition" resultType="Student">
+
+        select *
+        from tb_student
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                name like "%"#{name}"%"
+
+            </if>
+
+            <if test="gender!=null and gender!=''">
+
+                and gender=#{gender}
+
+            </if>
+            <if test="grade!=null and grade!=''">
+
+                and grade=#{grade}
+
+            </if>
+
+            <if test="major!=null and major!=''">
+
+                and major=#{major}
+
+            </if>
+
+            <if test="state!=null and state!=''">
+
+                and state=#{state}
+
+            </if>
+
+            <if test="createDate!=null and createDate!=''">
+
+                and create_date &gt;= #{createDate}
+
+            </if>
+
+            <if test="dormId!=null and dormId!=''">
+
+                and dorm_id=#{dormId}
+
+            </if>
+
+
+
+        </where>
+        order by id asc
+
+        limit #{skipCount},#{pageSize}
+    </select>
+</mapper>

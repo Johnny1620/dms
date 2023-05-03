@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.companyname.dms.workbench.mapper.BuildMapper">
+
+    <update id="update">
+        update tb_build
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="info != null and info != ''">info = #{info},</if>
+            <if test="date != null and date != ''">date = #{date},</if>
+            <if test="accountId != null and accountId != ''">account_id = #{accountId},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getBuildAndDormNameById" resultType="map">
+
+        select
+            b.id,
+            b.name,
+            b.info,
+            b.date,
+            da.name as dormName
+
+        from tb_build b
+        left join tb_dorm_account da
+        on  b.account_id=da.id
+
+        where b.id=#{id}
+
+    </select>
+
+    <delete id="deleteByIds">
+
+        delete from tb_build where id in
+
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </delete>
+
+    <select id="selectByIds" resultType="int">
+
+        select count(*) from tb_build where id in
+
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
+    <select id="getBuildListByCondition" resultType="map">
+
+        select
+            b.id as id,
+            b.name as name,
+            b.info as info,
+            b.date as date,
+            da.name as dormName,
+            da.position as position,
+            da.phone as phone
+
+        from tb_build b
+        left join tb_dorm_account da
+        on b.account_id=da.id
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                b.name like '%'#{name}'%'
+
+            </if>
+
+            <if test="info!=null and info!=''">
+
+                and b.info=#{info}
+
+            </if>
+            <if test="date!=null and date!=''">
+
+                and b.date &gt;= #{date}
+
+            </if>
+
+        </where>
+        order by b.name asc
+
+        limit #{skipCount},#{pageSize}
+    </select>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+
+        from tb_build
+
+        <where>
+
+            <if test="name!=null and name!=''">
+
+                name like '%'#{name}'%'
+
+            </if>
+
+            <if test="info!=null and info!=''">
+
+                and info=#{info}
+
+            </if>
+            <if test="date!=null and date!=''">
+
+                and date &gt;= #{date}
+
+            </if>
+
+        </where>
+
+    </select>
+
+
+    <insert id="save">
+        insert into tb_build values(null,#{name},#{info},#{accountId},#{date})
+    </insert>
+</mapper>

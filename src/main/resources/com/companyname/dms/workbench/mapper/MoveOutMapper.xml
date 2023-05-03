@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.companyname.dms.workbench.mapper.MoveOutMapper">
+
+    <delete id="deleteByStuId">
+        delete from tb_move_out where stu_id=#{id}
+    </delete>
+
+    <insert id="saveStuAndDate">
+        insert into tb_move_out values(null,#{stuId},#{moveOutDate})
+    </insert>
+</mapper>

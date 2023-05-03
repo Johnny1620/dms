@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <!--<display-name>dms</display-name>-->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+
+  <!--解决乱码问题-->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.companyname.dms.web.filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+
+  <!--验证登录-->
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>com.companyname.dms.web.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+
+  <!--当访问特定资源时，过滤权限不足的-->
+  <filter>
+    <filter-name>PowerFilter</filter-name>
+    <filter-class>com.companyname.dms.web.filter.PowerFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>PowerFilter</filter-name>
+    <url-pattern>/workbench/accountmanager/*</url-pattern>
+    <url-pattern>/workbench/student/*</url-pattern>
+    <url-pattern>/workbench/build/*</url-pattern>
+    <url-pattern>/workbench/dorm/*</url-pattern>
+  </filter-mapping>
+
+
+
+
+  <!-- 登录控制器 -->
+  <servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>com.companyname.dms.settings.web.controller.AccountServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountServlet</servlet-name>
+    <url-pattern>/settings/account/login.do</url-pattern>
+  </servlet-mapping>
+
+  <!--宿管账号控制器-->
+  <servlet>
+    <servlet-name>DormAccountController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.DormAccountController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DormAccountController</servlet-name>
+    <url-pattern>/workbench/dormaccount/pageList.do</url-pattern>
+    <url-pattern>/workbench/dormaccount/save.do</url-pattern>
+    <url-pattern>/workbench/dormaccount/delete.do</url-pattern>
+    <url-pattern>/workbench/dormaccount/getDormInfoById.do</url-pattern>
+    <url-pattern>/workbench/dormaccount/update.do</url-pattern>
+  </servlet-mapping>
+
+  <!--学生信息控制器-->
+  <servlet>
+    <servlet-name>StudentController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.StudentController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudentController</servlet-name>
+    <url-pattern>/workbench/student/pageList.do</url-pattern>
+    <url-pattern>/workbench/student/save.do</url-pattern>
+    <url-pattern>/workbench/student/delete.do</url-pattern>
+    <url-pattern>/workbench/student/getStuInfoById.do</url-pattern>
+    <url-pattern>/workbench/student/update.do</url-pattern>
+  </servlet-mapping>
+
+  <!--宿舍楼信息控制器-->
+  <servlet>
+    <servlet-name>BuildController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.BuildController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BuildController</servlet-name>
+    <url-pattern>/workbench/build/save.do</url-pattern>
+    <url-pattern>/workbench/build/pageList.do</url-pattern>
+    <url-pattern>/workbench/build/delete.do</url-pattern>
+    <url-pattern>/workbench/build/getDormNameId.do</url-pattern>
+    <url-pattern>/workbench/build/getBuildById.do</url-pattern>
+    <url-pattern>/workbench/build/update.do</url-pattern>
+
+  </servlet-mapping>
+
+<!--宿舍控制器-->
+  <servlet>
+    <servlet-name>DormController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.DormController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DormController</servlet-name>
+    <url-pattern>/workbench/dorm/pageList.do</url-pattern>
+    <url-pattern>/workbench/dorm/save.do</url-pattern>
+    <url-pattern>/workbench/dorm/delete.do</url-pattern>
+    <url-pattern>/workbench/dorm/getDormInfoById.do</url-pattern>
+    <url-pattern>/workbench/dorm/update.do</url-pattern>
+  </servlet-mapping>
+
+  <!--入住迁出控制器-->
+  <servlet>
+    <servlet-name>MoveController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.MoveController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MoveController</servlet-name>
+    <url-pattern>/workbench/move/into/getStuNameId.do</url-pattern>
+    <url-pattern>/workbench/move/into/save.do</url-pattern>
+    <url-pattern>/workbench/move/into/pageList.do</url-pattern>
+    <url-pattern>/workbench/move/out/getStuNameId.do</url-pattern>
+    <url-pattern>/workbench/move/out/save.do</url-pattern>
+    <url-pattern>/workbench/move/out/pageList.do</url-pattern>
+  </servlet-mapping>
+
+  <!--缺勤控制器-->
+  <servlet>
+    <servlet-name>AbsentController</servlet-name>
+    <servlet-class>com.companyname.dms.workbench.web.controller.AbsentController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AbsentController</servlet-name>
+    <url-pattern>/workbench/absent/pageList.do</url-pattern>
+    <url-pattern>/workbench/absent/save.do</url-pattern>
+    <url-pattern>/workbench/absent/delete.do</url-pattern>
+
+  </servlet-mapping>
+
+
+
+
+
+</web-app>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
